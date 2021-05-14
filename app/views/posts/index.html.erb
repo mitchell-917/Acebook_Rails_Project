@@ -1,0 +1,52 @@
+<div class="columns mt-6 is-centered table-container">
+  <div class="column is-half">
+    <% @posts.each do |post| %>
+    <div class="card">
+      <header class="card-header">
+        <% time_posted = post.created_at %>
+        <p class="card-header-title"><%= post.user.email.split('@')[0].capitalize %></p>
+        <p class="pr-2"><%= time_posted.strftime("%m/%d/%Y %I:%M%p") %></p>
+      </header>
+      <div class="card-content">
+        <div class="content">
+          <p class="form"><%= post.message %></p>
+          <% unless post.image.url == '/images/original/missing.png'%>
+          <%= image_tag post.image.url(:medium)%>
+          <% end %>
+        </div>
+      </div>
+      <% if post.user == current_user %>
+      <div class="card-footer">
+        <span class="icon">
+          <i class="far fa-thumbs-up ml-4"></i> 
+        </span>
+        <p class="ml-2"><%= post.likes.count %></p>
+        <% if Time.now - post.created_at < 10.minutes%>
+        <%= link_to 'Edit', edit_post_path(post), class: "card-footer-item" %>
+        <% end %>
+        <%= link_to 'Destroy', post, method: :delete, data: { confirm: "Are you sure?" }, class: "card-footer-item mr-6"%>
+      </div>
+      <% end %>
+        <% if current_user != post.user%>
+          <div class="card-footer">
+            <% pre_like = post.likes.find { |like| like.user_id == current_user.id} %>
+            <% if pre_like %>
+              <%= link_to post_like_path(post, pre_like), method: :delete do %>
+                <i class="far fa-thumbs-up ml-3"></i>
+              <%end%>
+            <% else %>
+              <%= link_to post_likes_path(post), method: :post do %>
+                <i class="far fa-thumbs-up ml-3"></i>
+              <% end %>
+            <% end %>
+          <p class="ml-2"><%= post.likes.count %></p>
+          </div>
+        <% end %>
+    </div>
+    <br>
+    <% end %>
+    <%= link_to 'New post', new_post_path, class: "button is-success" %>
+  </div>
+</div>
+<br>
+
