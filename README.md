@@ -1,8 +1,6 @@
 # Simply Rails AceBook 
 
-This is our project for Acebook.
-
-Trello - https://trello.com/b/z3ggmgJ9/acebook
+This is learning project for creating a web based social media application using Ruby on Rails.
 
 ## Quickstart
 
